@@ -14,8 +14,39 @@ userRouter.post("/", async (req, resp, next) => {
 
 userRouter.get("/", async (req, resp, next) => {
   try {
-    const user = UserModel.find();
-    resp.send(user);
+    const users = await UserModel.find();
+    resp.send(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.put("/:id", async (req, resp, next) => {
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    resp.send(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.delete("/:id", async (req, resp, next) => {
+  try {
+    const user = await UserModel.findById(req.params.id);
+    if (!user) {
+      resp
+        .status(404)
+        .send({ message: `User with ${req.params.id} is not found!` });
+    } else {
+      await UserModel.findByIdAndDelete(req.params.id);
+      resp.status(204).send();
+    }
   } catch (err) {
     next(err);
   }
