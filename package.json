@@ -1,0 +1,22 @@
+{
+  "name": "Strive-Homework-M6D9-Backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/convig src/server.js",
+    "dev": "nodemon -r dotenv/config src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.8.0",
+    "mongoose": "^6.0.4",
+    "query-to-mongo": "^0.10.1"
+  }
+}
