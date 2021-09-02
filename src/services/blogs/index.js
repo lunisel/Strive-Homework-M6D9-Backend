@@ -44,4 +44,47 @@ blogRouter.post("/:id/comments", async (req, resp, next) => {
   }
 });
 
+blogRouter.get("/:id/comments", async (req, resp, next) => {
+  try {
+    const blog = await BlogModel.findById(req.params.id).populate(
+      "comments.user"
+    );
+    if (blog) {
+      resp.send(blog.comments);
+    } else {
+      resp
+        .status(404)
+        .send({ message: `blog with ${req.params.id} is not found!` });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+blogRouter.delete("/:id/comments/:commentId", async (req, resp, next) => {
+  try {
+    const blog = await BlogModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          comments: { _id: req.params.commentId },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    if (blog) {
+      resp.send(blog);
+    } else {
+      resp
+        .status(404)
+        .send({ message: `blog with ${req.params.id} is not found!` });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default blogRouter;
